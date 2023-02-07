@@ -1,4 +1,4 @@
-const apiKey = "AIzaSyD5KFd1tr-pLPFc1yUK8m7PW64scIimuSo";
+import { apiKey } from "../../../../secret/gcloud";
 export const url = "https://language.googleapis.com/v1/documents:analyzeSentiment?key=" + apiKey;
 
 export const buildRequestBody = (textContent) => {
