@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import ThemeProvider from "react-bootstrap/ThemeProvider";
-import "./index.css";
-import "./assets/bootstrap/bootstrap.min.css";
 import { Provider } from "react-redux";
 import store from "./components/store";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -11,6 +9,11 @@ import ErrorMessage from "./errorPage";
 import Home from "./routes/pages/Home";
 import TSF from "./routes/pages/TSF";
 import { submitTSF as tsfAction, loadTSF as tsfLoad } from "./components/Forms/TSF/FormTSF";
+import Imgine from "./routes/pages/Imgine";
+import { action as imgineAction, loader as imgineLoader } from "./components/Forms/Imgine/FormImgine";
+import "./assets/bootstrap/bootstrap.min.css";
+import "./index.css";
+import ImgineResponse from "./routes/pages/ImgineResponse";
 
 const router = createBrowserRouter([
 	{
@@ -24,6 +27,17 @@ const router = createBrowserRouter([
 				element: <TSF />,
 				action: tsfAction,
 				loader: tsfLoad,
+			},
+			{
+				path: "imgine",
+				element: <Imgine />,
+				action: imgineAction,
+				children: [],
+			},
+			{
+				path: "imagine/response",
+				element: <ImgineResponse />,
+				loader: imgineLoader,
 			},
 		],
 	},
