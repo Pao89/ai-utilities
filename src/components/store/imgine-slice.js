@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const selectedCanvasInitial = {
 	mid: null,
 	name: null,
+	score: null,
 };
 
 const imgineSlice = createSlice({
@@ -16,9 +17,11 @@ const imgineSlice = createSlice({
 			if (newCanvas) {
 				state.selectedCanvas.mid = newCanvas.mid;
 				state.selectedCanvas.name = newCanvas.name;
+				state.selectedCanvas.score = newCanvas.score;
 			} else {
 				state.selectedCanvas.mid = selectedCanvasInitial.mid;
 				state.selectedCanvas.name = selectedCanvasInitial.name;
+				state.selectedCanvas.score = selectedCanvasInitial.score;
 			}
 			sessionStorage.setItem("selectedCanvas", JSON.stringify(state.selectedCanvas));
 		},

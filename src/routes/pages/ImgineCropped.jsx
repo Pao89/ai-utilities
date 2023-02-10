@@ -21,10 +21,11 @@ async function crop(originalImg, vertices) {
 	return response.json();
 }
 
-async function saveCrop(imageName, mid, crop) {
+async function saveCrop(imageName, cropRecord) {
 	return localforage.getItem(imageName).then((record) => {
 		const crops = record.crops ? { ...record.crops } : {};
-		crops[mid] = crop;
+		const id = `${cropRecord.mid}-${cropRecord.score}}`;
+		crops[id] = cropRecord;
 		const newRecord = { ...record, crops: { ...crops } };
 		localforage.setItem(imageName, newRecord);
 	});
@@ -47,16 +48,19 @@ export async function loadCrop() {
 	if (!(selectedCanvas?.mid && processedImg)) throw new Error("You haven't selected an image/cropped one");
 	const imgName = await localforage.key(processedImg.key);
 	const record = await localforage.getItem(imgName);
+	const id = `${selectedCanvas.mid}-${selectedCanvas.score}}`;
 	//check if i saved this crop before processing it
-	if (record.crops?.hasOwnProperty(selectedCanvas?.mid)) {
-		return { image: record.crops[selectedCanvas.mid] };
+	if (record.crops?.hasOwnProperty(id)) {
+		return { image: record.crops[id].image };
 	}
 
 	const { dataURL } = record;
 	const objectAnnotations = record.objectAnnotations.map((item) => Array.from(item.localizedObjectAnnotations)).flat();
-	const selectedAnnotaion = objectAnnotations.find((annotation) => annotation.mid == selectedCanvas.mid);
+	const selectedAnnotaion = objectAnnotations.find(
+		(annotation) => annotation.mid == selectedCanvas.mid && annotation.score == selectedCanvas.score
+	);
 	const { image } = await crop(dataURL, selectedAnnotaion.boundingPoly.normalizedVertices);
-	saveCrop(imgName, selectedAnnotaion.mid, image);
+	saveCrop(imgName, { mid: selectedAnnotaion.mid, crop: image, score: selectedAnnotaion.score });
 	return { image: image };
 }
 

@@ -34,7 +34,7 @@ export default function ImgineBoundingBox(props) {
 			return !prevShow;
 		});
 		if (show) {
-			dispatch(imgineActions.setSelectedCanvas({ mid: localizedObject.mid, name: localizedObject.name }));
+			dispatch(imgineActions.setSelectedCanvas({ mid: localizedObject.mid, name: localizedObject.name, score: localizedObject.score }));
 		}
 	};
 

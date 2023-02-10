@@ -1,0 +1,9 @@
+.about-box {
+	a {
+		color: #e4dddd;
+		text-decoration: none;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
