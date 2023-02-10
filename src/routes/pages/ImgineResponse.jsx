@@ -1,22 +1,40 @@
-import React from "react";
-import { Col, Row } from "react-bootstrap";
-import Header from "../../components/Header/Header";
-import { headers } from "../../components/store/ui-content";
+import React, { useEffect } from "react";
+import { Button, Row, Stack } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useLoaderData } from "react-router";
+import { Link } from "react-router-dom";
+import ImgineCropper from "../../components/Content/Imgine/ImgineCropper";
+import StandardHeader from "../../components/Header/StandardHeader";
+import { imgineActions } from "../../components/store/imgine-slice";
+import { imgineResponse } from "../../components/store/ui-content";
 
-const key = "imgine";
-const headerContent = headers.get(key);
+const key = imgineResponse;
 
 export default function ImgineResponse(props) {
+	const dispatch = useDispatch();
+	const data = useLoaderData();
+	const selectedCanvas = useSelector((state) => state.imgine.selectedCanvas);
+
 	return (
 		<React.Fragment>
-			<Header {...headerContent} />
+			<StandardHeader dictionaryKey={key} />
 			<Row>
-				<Col className="gy-5">
-					<p></p>
-				</Col>
-			</Row>
-			<Row className="justify-content-center">
-				<Col className="col-6"></Col>
+				<Stack className="col align-items-center gy-3 mb-5">
+					<div className="d-flex flex-column gap-3 p-2">
+						{!selectedCanvas.name && <h5 className="m-0">Click a box to proceed</h5>}
+						{selectedCanvas?.name && (
+							<h5 className="m-0">
+								Selected: <span className="fst-italic">{selectedCanvas.name}</span>
+							</h5>
+						)}
+						<ImgineCropper data={data}></ImgineCropper>
+						{selectedCanvas?.name && (
+							<Link to="/imgine/cropped" className="align-self-end">
+								<Button>Crop</Button>
+							</Link>
+						)}
+					</div>
+				</Stack>
 			</Row>
 		</React.Fragment>
 	);

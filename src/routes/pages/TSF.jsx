@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card, CloseButton, Col, Row, Stack } from "react-bootstrap";
-import { useFetcher, useLoaderData } from "react-router-dom";
-import TSFAccordionListGroup from "../../components/Content/TSFAccordionListGroup";
-import TSFScore from "../../components/Content/TSFScore";
+import { useLoaderData } from "react-router-dom";
+import TSFAccordionListGroup from "../../components/Content/TSF/TSFAccordionListGroup";
+import TSFScore from "../../components/Content/TSF/TSFScore";
 import FormTSF from "../../components/Forms/TSF/FormTSF";
-import Header from "../../components/Header/Header";
-import { headers, introTexts } from "../../components/store/ui-content";
+import StandardHeader from "../../components/Header/StandardHeader";
 
 const key = "text-sentiment-feedback";
-const headerContent = headers.get(key);
-const introText = introTexts.get(key);
 
 export async function loadResult() {}
 
@@ -25,12 +22,7 @@ export default function TSF() {
 
 	return (
 		<React.Fragment>
-			<Header {...headerContent} />
-			<Row>
-				<Col className="gy-5">
-					<p>{introText}</p>
-				</Col>
-			</Row>
+			<StandardHeader dictionaryKey={key} />
 			<Row>
 				<Col>
 					<FormTSF showResponse={setShowResponse} />

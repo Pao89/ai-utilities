@@ -14,6 +14,7 @@ import { action as imgineAction, loader as imgineLoader } from "./components/For
 import "./assets/bootstrap/bootstrap.min.css";
 import "./index.css";
 import ImgineResponse from "./routes/pages/ImgineResponse";
+import ImgineCropped, { loadCrop } from "./routes/pages/ImgineCropped";
 
 const router = createBrowserRouter([
 	{
@@ -35,9 +36,14 @@ const router = createBrowserRouter([
 				children: [],
 			},
 			{
-				path: "imagine/response",
+				path: "imgine/response",
 				element: <ImgineResponse />,
 				loader: imgineLoader,
+			},
+			{
+				path: "imgine/cropped/",
+				element: <ImgineCropped />,
+				loader: loadCrop,
 			},
 		],
 	},

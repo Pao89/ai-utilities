@@ -5,7 +5,7 @@ const buildRequestBody = function (img) {
 	return JSON.stringify({
 		requests: {
 			image: {
-				content: img.dataURL.substr(img.dataURL.indexOf("/9j/")), //the api doesn't like anything before /9j/
+				content: img.dataURL.substr(img.dataURL.indexOf("/9j/")), //the api doesn't like anything before /9
 			},
 			features: [
 				{

@@ -5,11 +5,13 @@ import { Button, Form, Row, Stack } from "react-bootstrap";
 import { redirect, useNavigation, useSubmit } from "react-router-dom";
 import localforage from "localforage";
 import { getObjectLocalization } from "./gcloudImgine";
+import { useDispatch } from "react-redux";
+import { imgineActions } from "../../store/imgine-slice";
 
 export async function loader() {
-	const response = sessionStorage.getItem("response");
+	const response = JSON.parse(sessionStorage.getItem("response"));
 	if (!response) throw new Error("You shouldn't be here");
-	return null;
+	return await localforage.getItem(response.process);
 }
 
 const getKeyByImgName = async function (imgName) {
@@ -20,7 +22,6 @@ export async function action({ request }) {
 	const formData = await request.formData();
 	const values = Object.fromEntries(formData);
 	const img = values;
-	/* getKeyByImgName(img.name); */
 	const hasItem = await localforage
 		.getItem(img.name)
 		.then(async (response) => {
@@ -41,9 +42,9 @@ export async function action({ request }) {
 		.catch((error) => {
 			throw new Error(`Something went wrong, ${error}`);
 		});
-
-	sessionStorage.setItem("response", JSON.stringify({ process: img.name, hasItem: hasItem }));
-	return redirect(`imgine/response`);
+	const localForageKey = await getKeyByImgName(img.name);
+	sessionStorage.setItem("response", JSON.stringify({ process: img.name, key: localForageKey }));
+	return redirect(`response`);
 }
 
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
@@ -57,6 +58,7 @@ const schema = Yup.object().shape({
 });
 
 export default function FormImgine(props) {
+	const dispatch = useDispatch();
 	const submit = useSubmit();
 	const navigation = useNavigation();
 	return (
@@ -67,6 +69,7 @@ export default function FormImgine(props) {
 				const reader = new FileReader();
 				reader.addEventListener("load", () => {
 					const image = { name: values.image.name, dataURL: reader.result };
+					dispatch(imgineActions.setSelectedCanvas(null)); //new image has been selected, reset selectedCanvas
 					submit(image, { method: "post" });
 				});
 				reader.readAsDataURL(values.image);
